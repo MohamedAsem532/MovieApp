@@ -6,21 +6,23 @@ const IMG = "https://image.tmdb.org/t/p";
 const GENRE_IDS = { Action: 28, Comedy: 35, Drama: 18, Horror: 27, "Sci-Fi": 878 };
 
 // ---------- DOM ----------
-const $ = (id) => document.getElementById(id);
-const menuToggle = $("menu-toggle");
-const siteNav = $("site-nav");
-const searchForm = $("search-form");
-const searchInput = $("search-input");
-const navSeries = $("nav-series");
-const navFavorites = $("nav-favorites");
-const hero = $("hero");
-const genreFilters = $("genre-filters");
-const movieGrid = $("movie-grid");
-const emptyState = $("empty-state");
-const cardTemplate = $("movie-card-template");
-const dialog = $("movie-dialog");
-const dialogClose = $("dialog-close");
-const dialogFavorite = $("dialog-favorite");
+const menuToggle = document.querySelector("#menu-toggle");
+const siteNav = document.querySelector("#site-nav");
+const searchForm = document.querySelector("#search-form");
+const searchInput = document.querySelector("#search-input");
+const navSeries = document.querySelector("#nav-series");
+const navFavorites = document.querySelector("#nav-favorites");
+const hero = document.querySelector("#hero");
+const genreFilters = document.querySelector("#genre-filters");
+const movieGrid = document.querySelector("#movie-grid");
+const emptyState = document.querySelector("#empty-state");
+const cardTemplate = document.querySelector("#movie-card-template");
+const dialog = document.querySelector("#movie-dialog");
+const dialogClose = document.querySelector("#dialog-close");
+const dialogFavorite = document.querySelector("#dialog-favorite");
+const heroWatch = document.querySelector("#hero-watch");
+const heroDetails = document.querySelector("#hero-details");
+const dialogTitle = document.querySelector("#dialog-title");
 
 // ---------- State ----------
 const state = {
@@ -47,7 +49,9 @@ async function api(path, params = {}) {
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
   const res = await fetch(url);
   if (!res.ok) throw new Error(`TMDB error ${res.status}`);
-  return res.json();
+  const data = await res.json();
+  console.log(data) // to show the data in console 
+  return data;
 }
 
 // Normalise movie and TV results into one shape
@@ -242,7 +246,6 @@ siteNav.addEventListener("click", (e) => {
     searchInput.placeholder = state.mode === "tv" ? "Search series" : "Search movies";
   }
   emptyState.textContent = "No movies found. Try a different title or genre.";
-  refresh();
 });
 
 genreFilters.addEventListener("click", (e) => {
@@ -264,8 +267,8 @@ searchForm.addEventListener("submit", (e) => {
   refresh();
 });
 
-$("hero-details").addEventListener("click", () => state.hero && openDialog(state.hero));
-$("hero-watch").addEventListener("click", () => watchTrailer(state.hero));
+heroDetails.addEventListener("click", () => state.hero && openDialog(state.hero));
+heroWatch.addEventListener("click", () => watchTrailer(state.hero));
 dialogClose.addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", (e) => {
   if (e.target === dialog) dialog.close(); // click on backdrop
