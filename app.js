@@ -166,7 +166,7 @@ async function refresh() {
 // ---------- Dialog ----------
 function openDialog(item) {
   state.current = item;
-  $("dialog-title").textContent = item.title;
+  dialogTitle.textContent = item.title;
   dialog.querySelector(".dialog-year").textContent = item.year;
   dialog.querySelector(".dialog-genre").textContent = item.genres.join(", ") || "N/A";
   dialog.querySelector(".dialog-rating").textContent = item.rating.toFixed(1);
@@ -246,6 +246,8 @@ siteNav.addEventListener("click", (e) => {
     searchInput.placeholder = state.mode === "tv" ? "Search series" : "Search movies";
   }
   emptyState.textContent = "No movies found. Try a different title or genre.";
+    refresh();
+
 });
 
 genreFilters.addEventListener("click", (e) => {
